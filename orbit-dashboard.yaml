@@ -1,0 +1,4655 @@
+views:
+  - type: sections
+    title: Home
+    icon: mdi:home-circle
+    path: home
+    max_columns: 3
+    header:
+      layout: center
+      badges_position: top
+      badges_wrap: wrap
+    sections:
+      - type: grid
+        cards:
+          - type: custom:weather-forecast-card
+            entity: weather.home
+            show_current: true
+            show_forecast: true
+            default_forecast: daily
+            tap_action:
+              action: more-info
+            show_condition_effects:
+              - rain
+              - snow
+              - lightning
+              - sky
+              - moon
+              - sun
+            forecast_types: both
+            show_moon_phase: true
+            forecast:
+              mode: chart
+              show_sun_times: true
+              use_color_thresholds: true
+              scroll_to_selected: true
+              show_attribute_selector: true
+              default_chart_attribute: temperature_and_precipitation
+              extra_attribute: wind_bearing
+            forecast_action:
+              tap_action:
+                action: toggle-forecast
+              hold_action:
+                action: select-forecast-attribute
+            card_mod:
+              style: |
+                ha-card {
+                  padding-left: 0px !important;
+                  padding-right: 8px !important;
+                }
+          - type: custom:orbit-deck-card
+            layout: wrap
+            items_per_row: 2
+            separate_cards: true
+            decks:
+              - attributes: {}
+                card:
+                  type: custom:orbit-status-card
+                  mode: person
+                  main_entity: person.example_user
+                  tracker_entity: device_tracker.example_phone
+                  battery_entity_1: sensor.example_phone_battery_level
+              - attributes: {}
+                card:
+                  type: custom:orbit-action-card
+                  entities:
+                    - entity: script.evening
+                      accent_color: orange
+                    - entity: script.uk_streaming_actions_mr
+                      accent_color: yellow
+                    - entity: script.us_streaming_actions_mr
+                      accent_color: violet
+              - attributes: {}
+                card:
+                  type: custom:orbit-status-card
+                  main_entity: sensor.security_state
+                  tap_action:
+                    action: navigate
+                    navigation_path: "#security"
+                  main_entity_tap_action:
+                    action: more-info
+              - attributes: {}
+                card:
+                  type: custom:orbit-status-card
+                  entity: sensor.heating_state
+                  main_entity: sensor.heating_state
+            grid_options:
+              columns: full
+          - type: custom:orbit-status-card
+            mode: icon_only
+            wrap: true
+            items_per_row: 6
+            separate_cards: true
+            entities:
+              - entity: sensor.unavailable_entities
+                accent_on_color: red
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#unavailable-entities"
+              - entity: sensor.devices_with_low_battery
+                accent_on_color: blue
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#batteries"
+              - entity: sensor.number_of_doors_open
+                accent_on_color: blue
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#doors-open"
+              - entity: sensor.number_of_sockets_on
+                accent_on_color: blue
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#sockets-on"
+              - entity: sensor.number_of_motion_detected
+                accent_on_color: blue
+                main_entity_icon_on: orbit:motion_detected.svg
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#motion-detected"
+              - entity: sensor.number_of_lights_on
+                accent_on_color: light
+                main_entity_tap_action:
+                  action: navigate
+                  navigation_path: "#lights-on"
+              - entity: sensor.recycle_collection
+                accent_on_color: blue
+                state_template: state_attr('sensor.recycle_collection', 'daysTo') | int <2
+                label_template: state_attr('sensor.recycle_collection', 'daysTo')
+              - entity: sensor.rubbish_collection
+                accent_on_color: green
+                state_template: state_attr('sensor.rubbish_collection', 'daysTo') | int <2
+                label_template: state_attr('sensor.rubbish_collection', 'daysTo')
+              - entity: sensor.cleaner_due
+                accent_on_color: green
+                label_template: state_attr('sensor.cleaner_due', 'daysTo')
+              - entity: calendar.example_hot_water
+                accent_on_color: green
+              - entity: sensor.backup_backup_manager_state
+                accent_on_color: green
+                main_entity_icon: mdi:database
+                label_template: "0"
+          - type: custom:orbit-deck-card
+            layout: wrap
+            items_per_row: 4
+            decks:
+              - attributes:
+                  tap_action:
+                    action: navigate
+                    navigation_path: "#energy"
+                  hold_action:
+                    action: navigate
+                    navigation_path: /power-usage/2
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: custom:gauge-card-pro
+                  entity: sensor.main_import_power
+                  segments:
+                    - from: 0
+                      color: var(--green-color)
+                    - from: 400
+                      color: "#FFA500"
+                    - from: 900
+                      color: var(--red-color)
+                  needle: false
+                  gradient: true
+                  titles:
+                    primary:
+                      value: Electric
+                  gradient_resolution: auto
+                  max: 3000
+                  min: 0
+                  round: small
+                  gradient_background: true
+                  gradient_background_opacity: 0.4
+                  severity_centered: false
+                  severity_color_mode: gradient
+                  value_texts:
+                    primary:
+                      unit_before_value: false
+                      value: >-
+                        {% set power = states('sensor.main_import_power') %} {{
+                        power | float | round(0) if is_number(power) else '-' }}
+              - attributes:
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: custom:gauge-card-pro
+                  entity: sensor.relative_mod_level_boiler_otgw
+                  segments:
+                    - from: 0
+                      color: var(--green-color)
+                    - from: 50
+                      color: "#FFA500"
+                    - from: 75
+                      color: var(--red-color)
+                  needle: false
+                  gradient: true
+                  titles:
+                    primary:
+                      value: Boiler
+                  gradient_resolution: auto
+                  max: 100
+                  min: 0
+                  round: small
+                  gradient_background: true
+                  gradient_background_opacity: 0.4
+                  severity_centered: false
+                  severity_color_mode: gradient
+                  value_texts:
+                    primary: {}
+              - attributes:
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: custom:gauge-card-pro
+                  entity: >-
+                    sensor.octopus_energy_electricity_22j0006288_1591022098690_current_accumulative_consumption
+                  segments:
+                    - from: 0
+                      color: var(--green-color)
+                    - from: 5
+                      color: "#FFA500"
+                    - from: 5.5
+                      color: var(--red-color)
+                  needle: false
+                  gradient: true
+                  titles:
+                    primary:
+                      value: Electric
+                  gradient_resolution: auto
+                  max: 8
+                  min: 0
+                  round: small
+                  gradient_background: true
+                  gradient_background_opacity: 0.4
+                  severity_centered: false
+                  severity_color_mode: gradient
+                  value_texts:
+                    primary:
+                      unit_before_value: false
+                      value: >-
+                        {% set electric =
+                        states('sensor.octopus_energy_electricity_22j0006288_1591022098690_current_accumulative_consumption')
+                        %} {{ electric | float | round(1) if is_number(electric)
+                        else '-' }}
+              - attributes:
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: custom:gauge-card-pro
+                  entity: >-
+                    sensor.octopus_energy_gas_e6f23377622200_1354260601_current_accumulative_consumption
+                  segments:
+                    - from: 0
+                      color: var(--green-color)
+                    - from: 45
+                      color: "#FFA500"
+                    - from: 70
+                      color: var(--red-color)
+                  needle: false
+                  gradient: true
+                  titles:
+                    primary:
+                      value: GAS
+                  gradient_resolution: auto
+                  max: 80
+                  min: 0
+                  round: small
+                  gradient_background: true
+                  gradient_background_opacity: 0.4
+                  severity_centered: false
+                  severity_color_mode: gradient
+                  value_texts:
+                    primary:
+                      unit_before_value: false
+                      value: >-
+                        {% set gas =
+                        states('sensor.octopus_energy_gas_e6f23377622200_1354260601_current_accumulative_consumption')
+                        %} {{ gas | float | round(1) if is_number(gas) else '-'
+                        }}
+              - attributes:
+                  tap_action:
+                    action: more-info
+                    entity: sensor.system_monitor_processor_temperature
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: gauge
+                  name: CPU
+                  entity: sensor.system_monitor_processor_temperature
+                  needle: false
+                  severity:
+                    green: 25
+                    yellow: 50
+                    red: 75
+              - attributes:
+                  tap_action:
+                    action: more-info
+                    entity: sensor.system_monitor_processor_use
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: gauge
+                  name: CPU
+                  entity: sensor.system_monitor_processor_use
+                  needle: false
+                  severity:
+                    green: 25
+                    yellow: 50
+                    red: 75
+              - attributes:
+                  tap_action:
+                    action: more-info
+                    entity: sensor.cyberpower1500_battery_charge
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: gauge
+                  name: UPS Battery
+                  entity: sensor.cyberpower1500_battery_charge
+                  needle: false
+                  min: 0
+                  max: 100
+                  severity:
+                    green: 100
+                    yellow: 50
+                    red: 0
+              - attributes:
+                  tap_action:
+                    action: more-info
+                    entity: sensor.cyberpower1500_battery_runtime
+                  padding_top: "5"
+                  padding_right: "0"
+                  padding_bottom: "0"
+                  padding_left: "0"
+                card:
+                  type: gauge
+                  name: UPS Time
+                  entity: sensor.cyberpower1500_battery_runtime
+                  needle: false
+                  severity:
+                    green: 75
+                    yellow: 50
+                    red: 15
+            grid_options:
+              columns: full
+        column_span: 1
+      - type: grid
+        cards:
+          - type: custom:calendar-card-pro
+            entities:
+              - entity: calendar.example_home
+              - entity: calendar.example_cleaner
+              - entity: calendar.example_payments
+                accent_color: "#bd9d75"
+            days_to_show: 30
+            compact_events_to_show: 4
+            title_font_size: 14pt
+            vertical_line_width: 3px
+            day_spacing: 3px
+            event_spacing: 5px
+            additional_card_spacing: "-7px"
+            first_day_of_week: monday
+            month_separator_width: 3px
+            month_separator_color: "#03a9f4"
+            today_indicator: glow
+            event_background_opacity: 10
+            show_past_events: true
+            show_countdown: true
+            show_progress_bar: true
+            event_font_size: 16px
+            show_single_allday_time: false
+            time_font_size: 14px
+            time_icon_size: 16px
+            day_font_size: 24px
+            weather:
+              position: ""
+            tap_action:
+              action: expand
+          - type: custom:statistics-graph-chart-card
+            card_padding: 0
+            card_border_width: 0
+            show_y_axis: false
+            show_interval_picker: true
+            interval_picker_position: center
+            interval_options:
+              - 4H
+              - 8H
+              - 12H
+              - 24H
+            hours_to_show: 12
+            points_per_hour: 6
+            tooltip_match_axis: false
+            tooltip_order: default
+            height: auto
+            x_grid_style: dashed
+            y_grid_style: dashed
+            entities:
+              - entity: sensor.main_import_power
+                line_width: 1.5
+                color: "#b1dd8c"
+                color_thresholds:
+                  enabled: true
+                  values:
+                    - value: 0
+                      color: "#cce8b5"
+                    - value: 250
+                      color: "#96d35f"
+                    - value: 500
+                      color: "#fe985f"
+                    - value: 750
+                      color: "#ff8c2a"
+                    - value: 900
+                      color: "#ff4757"
+                rise_fall_colors:
+                  enabled: false
+                  increase: "#2ecc71"
+                  decrease: "#e74c3c"
+                  stable: "#95a5a6"
+                show_color_dot: false
+                state_size: "18"
+                hide_name: true
+            annotations: []
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: rgb(255, 153, 102)
+            area: electric_cupboard
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-energy
+            status1: sensor.main_import_power
+            status1_decimal_places: "0"
+            status2: sensor.electric_cupboard_sensor_temperature
+            status2_decimal_places: "0"
+            status3: sensor.electric_cupboard_sensor_humidity
+            status3_decimal_places: "0"
+            button1: light.electric_cupboard_light
+            curve_buttons_lock_position: true
+            curve_button1: binary_sensor.electric_cupboard_contact_sensor_door
+            curve_button5: >-
+              sensor.octopus_energy_electricity_22j0006288_1591022098690_current_demand
+            curve_button5_tap_action:
+              action: navigate
+              navigation_path: /power-usage/0
+            curve_button6: >-
+              sensor.octopus_energy_electricity_22j0006288_1591022098690_current_accumulative_consumption
+            curve_button6_tap_action:
+              action: navigate
+              navigation_path: /power-usage/1
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: green
+            area: front_garden
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/front-garden
+            button1: light.front_garden_wall_led
+            button1_on_color: light
+            button2: light.house_sign
+            curve_button1: binary_sensor.front_door_contact_sensor
+            curve_button2: binary_sensor.front_door_video_doorbell_person
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button3: binary_sensor.front_side_gate_contact_sensor
+            action_button: camera.front_door_video_doorbell_clear
+            grid_options:
+              columns: 6
+              rows: auto
+            custom1: camera.front_door_video_doorbell_fluent
+          - type: custom:orbit-area-card
+            accent_color: green
+            area: back_garden
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/back-garden
+            status1: sensor.back_garden_temperature_sensor_temperature
+            status2: sensor.back_garden_temperature_sensor_humidity
+            button1: light.outside_roof_lights
+            button1_on_color: light
+            curve_button1: binary_sensor.back_door_contact_sensor
+            curve_button2: binary_sensor.back_door_video_doorbell_person
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button3: binary_sensor.back_side_gate_contact_sensor
+            action_button: camera.back_door_video_doorbell_clear
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: rgb(133, 173, 173)
+            area: garage
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/garage
+            main_entity: cover.garage_roller_door
+            main_entity_icon_on: orbit:garage-door_open.svg
+            main_entity_icon_off: orbit:garage-door_closed.svg
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            button1: light.garage_lights
+            button1_on_color: state-light-warm-color
+            button2: light.garage_wall_lights
+            button2_on_color: light
+            button3: light.garage_number_sign
+            curve_buttons_lock_position: true
+            curve_button1: binary_sensor.garage_door_contact_sensor
+            curve_button2: binary_sensor.garage_motion_sensor_occupancy
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button6: switch.garage_roller_door_switch
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: red
+            area: kitchen
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/kitchen
+            status1: sensor.wiser_lts_temperature_kitchen
+            status1_icon: ""
+            status1_decimal_places: "0"
+            status2: sensor.kitchen_neff_refrigerator_sensor_temperature
+            status2_decimal_places: "0"
+            status3: sensor.kitchen_neff_freezer_sensor_temperature
+            status3_decimal_places: "0"
+            button1: light.kitchen_lights
+            button1_on_color: state-light-daylight-color
+            button2: light.kitchen_cabinets
+            button2_on_color: light
+            button3: light.kitchen_floor_led
+            button3_on_color: light
+            curve_button1: binary_sensor.kitchen_contact_sensor_door
+            curve_button1_tap_action:
+              action: more-info
+            curve_button2: binary_sensor.kitchen_motion_sensor_occupancy
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button3: cover.kitchen_window_shade
+            curve_button3_icon_source: custom
+            curve_button3_icon_on: orbit:shutter-opening.svg
+            curve_button3_icon_off: orbit:shutter-closing.svg
+            curve_button4: switch.kitchen_sockets_4_left
+            curve_button5: switch.kitchen_sockets_2_left
+            curve_button6: switch.kitchen_washing_machine_plug_outlet
+            curve_button6_icon_on: orbit:washing-machine-running.svg
+            curve_button6_icon_off: mdi:washing-machine
+            curve_button6_state_template: states('sensor.kitchen_washing_machine_power') | int > 0
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: yellow
+            area: lounge
+            navigate:
+              navigation_path: /dashboard-main/lounge
+            main_entity: climate.lounge_heating
+            main_entity_icon_source: area
+            main_entity_icon: ""
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.wiser_lts_temperature_lounge
+            status2: sensor.wiser_lts_humidity_lounge
+            button1: light.lounge_table_light
+            button1_on_color: state-light-active-color
+            button1_off_color: ""
+            button2: light.lounge_extension_lights
+            button2_on_color: light
+            button2_off_color: ""
+            button3: light.lounge_lamps
+            button3_on_color: state-light-active-color
+            curve_button1: binary_sensor.lounge_contact_sensor_door
+            curve_button2: binary_sensor.lounge_motion_sensor_occupancy
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button3: cover.lounge_window_shade
+            curve_button2_icon_source: custom
+            curve_button3_icon_on: orbit:shutter-opening.svg
+            curve_button3_icon_off: orbit:shutter-closing.svg
+            curve_button4: cover.lounge_patio_window_shade
+            curve_button4_icon_source: custom
+            curve_button4_icon_on: orbit:shutter-opening.svg
+            curve_button4_icon_off: orbit:shutter-closing.svg
+            curve_button5: switch.lounge_sockets_4_left
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: yellow
+            area: media_room
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/media-room
+            main_entity: climate.media_room_heating
+            main_entity_icon_source: area
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.wiser_lts_temperature_media_room
+            status2: sensor.wiser_lts_humidity_media_room
+            button1: light.media_room_lights
+            button1_on_color: state-light-daylight-color
+            button2: light.media_room_sideboard_lamps
+            button2_on_color: light
+            curve_button1: binary_sensor.media_room_contact_sensor_door
+            curve_button2: binary_sensor.media_room_motion_sensor_occupancy
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button3: cover.media_room_window_shade
+            curve_button2_icon_source: custom
+            curve_button3_icon_on: orbit:shutter-opening.svg
+            curve_button3_icon_off: orbit:shutter-closing.svg
+            curve_button4: switch.media_room_sofa_outlet
+            curve_button4_tap_action:
+              action: toggle
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: blue
+            area: hall
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/hall
+            status1: sensor.hall_motion_sensor_device_temperature
+            button1: light.hall_lights
+            button1_on_color: state-light-daylight-color
+            curve_buttons_lock_position: true
+            curve_button2: binary_sensor.hall_motion_sensor_occupancy
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            curve_button4: switch.hall_sockets_left
+            curve_button5: switch.hall_sockets_right
+            curve_button6: switch.hall_cupboard_sockets_1_right
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: blue
+            area: landing
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/landing
+            status1: sensor.landing_temperature_sensor_temperature
+            status1_decimal_places: "1"
+            status2: sensor.landing_temperature_sensor_humidity
+            status2_decimal_places: "0"
+            status3: sensor.gas_sensor_gas_concentration
+            button1: light.landing_lights
+            button1_on_color: state-light-daylight-color
+            curve_buttons_lock_position: true
+            curve_button2: binary_sensor.landing_motion_sensor
+            curve_button2_icon_on: orbit:motion_detected.svg
+            curve_button2_icon_off: orbit:motion_off.svg
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: blue
+            area: bathroom
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/wetroom
+            main_entity: binary_sensor.slave_dhw_active_boiler_otgw
+            main_entity_icon_on: orbit:shower_on.svg
+            main_entity_icon_off: orbit:shower_off.svg
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.wetroom_sensor_temperature
+            status1_decimal_places: "1"
+            status2: sensor.wetroom_sensor_humidity
+            status2_decimal_places: "0"
+            status3: sensor.dhw_setpoint_boiler_otgw
+            status3_decimal_places: "0"
+            button1: light.wetroom_lights
+            button1_on_color: state-light-daylight-color
+            button2: fan.wetroom_extractor_fan
+            button2_on_color: rgb(77, 195, 255)
+            button2_icon_on: orbit:fan.svg
+            button2_icon_off: mdi:fan
+            button2_state_template: state_attr('fan.wetroom_extractor_fan', 'percentage') | int > 50
+            button2_tap_action:
+              action: more-info
+            curve_buttons_lock_position: true
+            curve_button1: input_boolean.hot_water_toggle
+            curve_button1_tap_action:
+              action: toggle
+            curve_button3: button.hot_water_low
+            curve_button3_tap_action:
+              action: call-service
+              service: button.press
+              service_data:
+                entity_id: button.hot_water_low
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: gold
+            area: office
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/office
+            main_entity: climate.office_heating
+            main_entity_icon_source: area
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.wiser_lts_temperature_office
+            status2: sensor.wiser_lts_humidity_office
+            button1: light.office_lights
+            button1_on_color: state-light-daylight-color
+            curve_buttons_lock_position: true
+            curve_button1: binary_sensor.office_contact_sensor_door
+            curve_button2: cover.office_window_shade
+            curve_button2_icon_source: custom
+            curve_button2_icon_on: orbit:shutter-opening.svg
+            curve_button2_icon_off: orbit:shutter-closing.svg
+            curve_button4: switch.office_sockets_1_left
+            curve_button4_tap_action:
+              action: more-info
+            curve_button5: switch.office_sockets_1_right
+            curve_button5_tap_action:
+              action: toggle
+            curve_button6: switch.office_sockets_2_left
+            curve_button6_tap_action:
+              action: toggle
+            curve_button6_hold_action:
+              action: more-info
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: violet
+            area: main_bedroom
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/main-bedroom
+            main_entity: climate.main_bedroom_heating
+            main_entity_icon_source: area
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.main_bedroom_temperature
+            status2: sensor.main_bedroom_humidity
+            button1: light.main_bedroom_lights
+            curve_buttons_lock_position: true
+            curve_button1: binary_sensor.main_bedroom_contact_sensor_door
+            curve_button2: cover.main_bedroom_window_shade
+            curve_button2_icon_source: custom
+            curve_button2_icon_on: orbit:shutter-opening.svg
+            curve_button2_icon_off: orbit:shutter-closing.svg
+            curve_button5: switch.main_bedroom_sockets_left
+            curve_button5_tap_action:
+              action: toggle
+            curve_button6: switch.main_bedroom_sockets_right
+            curve_button6_tap_action:
+              action: toggle
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:orbit-area-card
+            accent_color: violet
+            area: spare_bedroom
+            tap_action:
+              action: navigate
+              navigation_path: /dashboard-main/spare-bedroom
+            hold_action:
+              action: more-info
+            main_entity: climate.spare_bedroom_heating
+            main_entity_icon_source: area
+            main_entity_tap_action:
+              action: none
+            main_entity_hold_action:
+              action: more-info
+            status1: sensor.wiser_lts_temperature_spare_bedroom
+            status2: sensor.wiser_lts_humidity_spare_bedroom
+            button1: light.spare_bedroom_light
+            button1_on_color: ""
+            button1_tap_action:
+              action: toggle
+            button1_hold_action:
+              action: more-info
+            button2: light.spare_bedroom_lamp
+            button2_on_color: state-light-cool-color
+            button2_off_color: ""
+            button2_tap_action:
+              action: toggle
+            button2_hold_action:
+              action: more-info
+            curve_button1: binary_sensor.spare_bedroom_contact_sensor
+            curve_button1_hold_action:
+              action: none
+            curve_button2: cover.spare_bedroom_window_shade
+            curve_button2_icon_source: custom
+            curve_button2_icon_on: orbit:shutter-opening.svg
+            curve_button2_icon_off: orbit:shutter-closing.svg
+            grid_options:
+              columns: 6
+              rows: auto
+            custom2: climate.spare_bedroom_heating
+        column_span: 2
+      - type: grid
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#security"
+            name: Security
+            icon: mdi:shield-home
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: tile
+                    entity: alarm_control_panel.house_alarm
+                    vertical: true
+                    features:
+                      - type: alarm-modes
+                        modes:
+                          - armed_away
+                          - disarmed
+                  - type: tile
+                    entity: alarm_control_panel.garage_alarm
+                    vertical: true
+                    features:
+                      - type: alarm-modes
+                        modes:
+                          - armed_away
+                          - disarmed
+              - type: custom:advanced-camera-card
+                cameras:
+                  - camera_entity: camera.back_door_video_doorbell_clear
+                  - camera_entity: camera.front_door_video_doorbell_clear
+              - type: tile
+                entity: cover.garage_roller_door
+                vertical: true
+                features:
+                  - type: cover-open-close
+              - type: horizontal-stack
+                cards:
+                  - type: tile
+                    entity: binary_sensor.garage_door_contact_sensor
+                    name: Garage Door
+                    vertical: true
+                    color: red
+                  - type: tile
+                    entity: binary_sensor.back_door_contact_sensor
+                    name: Back Door
+                    vertical: true
+                    color: red
+                  - type: tile
+                    entity: binary_sensor.front_door_contact_sensor
+                    name: Front Door
+                    vertical: true
+                    color: red
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            hide_backdrop: false
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#energy"
+            name: Energy
+            icon: mdi:flash
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: entities
+                  show_header_toggle: false
+                  state_color: true
+                  card_mod:
+                    style:
+                      .: |
+                        ha-card: {
+                          --ha-card-background: none;
+                          box-shadow: none;
+                        }
+                        .card-content {
+                          padding-top: 0px !important;
+                          padding-bottom: 0px !important;
+                        }
+                      hui-toggle-entity-row:
+                        $: |
+                          hui-generic-entity-row {
+                            height: 25px;
+                          }
+                filter:
+                  include:
+                    - options:
+                        type: custom:bubble-card
+                        card_type: button
+                        button_type: state
+                        show_attribute: false
+                        show_last_changed: true
+                        show_state: true
+                      domain: sensor
+                      state: ">0"
+                      attributes:
+                        device_class: power
+                      sort:
+                        method: state
+                        reverse: true
+                        numeric: true
+                  exclude:
+                    - options: {}
+                      label: ignore_from_status_sensor
+                show_empty: true
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            popup_mode: centered
+            card_layout: normal
+            show_header: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#doors-open"
+            name: Doors Open
+            icon: mdi:door-open
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  include:
+                    - options:
+                        type: custom:bubble-card
+                        card_type: button
+                        button_type: state
+                        show_attribute: false
+                        show_last_changed: true
+                        show_state: true
+                      domain: binary_sensor
+                      state: "on"
+                      attributes:
+                        device_class: door
+                      sort:
+                        method: friendly_name
+                  exclude:
+                    - options: {}
+                      label: ignore_from_status_sensor
+                show_empty: true
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            card_layout: normal
+            hide_backdrop: false
+            popup_mode: adaptive-dialog
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#lights-on"
+            name: Lights On
+            icon: mdi:door-open
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  include:
+                    - options:
+                        type: custom:bubble-card
+                        card_type: button
+                        show_state: true
+                        show_last_changed: true
+                        tap_action:
+                          action: toggle
+                        button_type: slider
+                        button_action:
+                          tap_action:
+                            action: more-info
+                      domain: light
+                      state: "on"
+                      sort:
+                        method: friendly_name
+                  exclude:
+                    - options: {}
+                      label: ignore_from_auto_entities
+                show_empty: true
+                size: classic
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            card_layout: normal
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#batteries"
+            name: Batteries
+            icon: mdi:battery-outline
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: entities
+                  show_header_toggle: false
+                  state_color: true
+                  card_mod:
+                    style:
+                      .: |
+                        ha-card: {
+                          --ha-card-background: none;
+                          box-shadow: none;
+                        }
+                        .card-content {
+                          padding-top: 0px !important;
+                          padding-bottom: 0px !important;
+                        }
+                      hui-toggle-entity-row:
+                        $: |
+                          hui-generic-entity-row {
+                            height: 25px;
+                          }
+                show_empty: false
+                filter:
+                  template: >
+                    {% for entity in
+                    state_attr('sensor.devices_with_low_battery','entities') %}
+                      {{ entity.entity_id }}
+                    {% endfor %}
+                sort:
+                  method: friendly_name
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#sockets-on"
+            name: Sockets On
+            icon: mdi:power-socket-uk
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  include:
+                    - options:
+                        type: custom:bubble-card
+                        card_type: button
+                        show_state: true
+                        show_last_changed: true
+                        tap_action:
+                          action: toggle
+                        button_type: slider
+                        button_action:
+                          tap_action:
+                            action: more-info
+                      domain: switch
+                      state: "on"
+                      attributes:
+                        device_class: outlet
+                      sort:
+                        method: friendly_name
+                  exclude:
+                    - options: {}
+                      label: ignore_from_auto_entities
+                show_empty: true
+                size: classic
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            card_layout: normal
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#unavailable-entities"
+            name: Unavailable Entities
+            icon: mdi:exclamation-thick
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  include:
+                    - state: unavailable
+                      options:
+                        type: custom:bubble-card
+                        card_type: button
+                        button_type: state
+                        show_attribute: false
+                        show_last_changed: true
+                        show_state: true
+                  exclude:
+                    - options: {}
+                      label: ignore_from_status_sensor
+                show_empty: true
+                size: classic
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            card_layout: normal
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#motion-detected"
+            name: Motion Detected
+            icon: mdi:motion-sensor
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  include:
+                    - options:
+                        type: custom:bubble-card
+                        card_type: button
+                        button_type: state
+                        show_attribute: false
+                        show_last_changed: true
+                        show_state: true
+                      domain: binary_sensor
+                      state: "on"
+                      attributes:
+                        device_class: motion
+                  exclude:
+                    - options: {}
+                      sort:
+                        method: friendly_name
+                      label: ignore_from_auto_entities
+                show_empty: true
+                size: classic
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            card_layout: normal
+            popup_mode: centered
+            full_width_on_mobile: true
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: "#stale-entities"
+            name: Stale Entities
+            icon: mdi:clock-alert
+            button_type: name
+            card_layout: normal
+            popup_mode: centered
+            full_width_on_mobile: true
+            cards:
+              - type: custom:auto-entities
+                card:
+                  type: grid
+                  columns: 1
+                  square: false
+                card_param: cards
+                filter:
+                  template: |
+                    {% set stale =
+                      state_attr('sensor.stale_entities', 'entities')
+                      | default([], true)
+                    %}
+                    {% if stale is string %}
+                      {% set stale = stale | from_json %}
+                    {% endif %}
+                    {% set ns = namespace(cards=[]) %}
+                    {% for item in stale %}
+                      {% set ns.cards = ns.cards + [{
+                        'entity': item.entity_id,
+                        'type': 'custom:bubble-card',
+                        'card_type': 'button',
+                        'button_type': 'state',
+                        'show_attribute': false,
+                        'show_last_changed': true,
+                        'show_state': true
+                      }] %}
+                    {% endfor %}
+                    {{ ns.cards }}
+                show_empty: true
+    cards: []
+    theme: AndyBlac-Home
+  - title: Garage
+    path: garage
+    icon: mdi:garage-variant
+    type: sections
+    max_columns: 4
+    badges:
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.garage_motion_sensor_occupancy
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.garage_roller_door_beam
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: cover.garage_roller_door
+        color: ""
+      - type: custom:mushroom-template-badge
+        icon: mdi:door-open
+        content: "{{ state_attr('sensor.number_of_doors_open', 'count')['Garage'] }}"
+        color: >-
+          {{ 'primary' if state_attr('sensor.number_of_doors_open',
+          'count')['Garage'] }}
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Garage'] }}"
+        color: >-
+          {{ 'amber' if state_attr('sensor.number_of_lights_on',
+          'count')['Garage'] }}
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        content: "{{ state_attr('sensor.number_of_sockets_on', 'count')['Garage'] }}"
+        color: >-
+          {{ 'primary' if state_attr('sensor.number_of_sockets_on',
+          'count')['Garage'] }}
+    sections:
+      - type: grid
+        cards: []
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - features:
+              - type: alarm-modes
+                modes:
+                  - armed_away
+                  - disarmed
+            type: tile
+            entity: alarm_control_panel.garage_alarm
+            vertical: true
+            name: Alarm
+            features_position: bottom
+            grid_options:
+              columns: 8
+              rows: 3
+          - features:
+              - type: cover-open-close
+            type: tile
+            entity: cover.garage_roller_door
+            vertical: true
+            name: Roller Door
+            features_position: bottom
+            grid_options:
+              columns: 8
+              rows: 3
+          - type: tile
+            entity: switch.garage_roller_door_switch
+            features_position: bottom
+            vertical: true
+            state_content: state
+            name: Roller Door Switch
+            grid_options:
+              columns: 8
+              rows: 3
+        column_span: 2
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards: []
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards: []
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - type: tile
+            entity: light.garage_lights
+            vertical: true
+            name: Lights
+            features_position: bottom
+            grid_options:
+              columns: 8
+              rows: 2
+          - type: tile
+            entity: light.garage_wall_lights
+            vertical: true
+            name: Wall Lights
+            features_position: bottom
+            grid_options:
+              columns: 8
+              rows: 2
+          - type: tile
+            entity: light.garage_number_sign
+            features_position: bottom
+            vertical: true
+            name: Number Sign
+            grid_options:
+              columns: 8
+              rows: 2
+            color: white
+          - type: tile
+            vertical: true
+            name: Sockets 1 Left
+            features_position: bottom
+            entity: switch.garage_sockets_1_left
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            vertical: true
+            name: Sockets 1 Right
+            features_position: bottom
+            entity: switch.garage_sockets_1_right
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: switch.garage_sockets_2_left
+            features_position: bottom
+            vertical: true
+            name: Sockets 2 Left
+            color: primary
+        column_span: 2
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards: []
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - features:
+              - type: alarm-modes
+                modes:
+                  - armed_away
+                  - disarmed
+            type: tile
+            entity: alarm_control_panel.garage_alarm
+            vertical: true
+            name: Alarm
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 3
+          - features:
+              - type: cover-open-close
+            type: tile
+            entity: cover.garage_roller_door
+            vertical: true
+            name: Roller Door
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 3
+          - type: tile
+            entity: switch.garage_roller_door_switch
+            features_position: bottom
+            vertical: true
+            state_content: state
+            name: Roller Door Switch
+            grid_options:
+              columns: 12
+              rows: 3
+        column_span: 2
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 0px) and (max-width: 767px)"
+      - type: grid
+        cards:
+          - type: tile
+            entity: light.garage_lights
+            vertical: true
+            name: Lights
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: light.garage_wall_lights
+            vertical: true
+            name: Wall Lights
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: light.garage_number_sign
+            features_position: bottom
+            vertical: true
+            name: Number Sign
+            grid_options:
+              columns: 6
+              rows: 2
+            color: white
+          - type: tile
+            vertical: true
+            name: Sockets 1 Left
+            features_position: bottom
+            entity: switch.garage_sockets_1_left
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            vertical: true
+            name: Sockets 1 Right
+            features_position: bottom
+            entity: switch.garage_sockets_1_right
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: switch.garage_sockets_2_left
+            features_position: bottom
+            vertical: true
+            name: Sockets 2 Left
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 2
+        column_span: 2
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 0px) and (max-width: 767px)"
+    cards: []
+    subview: true
+  - title: Back Garden
+    type: sections
+    max_columns: 4
+    cards: []
+    icon: mdi:flower-poppy
+    badges:
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.back_door_contact_sensor
+        tap_action:
+          action: more-info
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Back Garden'] }}"
+        color: ""
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        content: >-
+          {{ state_attr('sensor.number_of_sockets_on', 'count')['Back Garden']
+          }}
+        color: ""
+    sections:
+      - type: grid
+        cards:
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_tooltip_total: false
+                  show_interval_picker: true
+                  interval_options:
+                    - 1H
+                    - 2H
+                    - 4H
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 6
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 185
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.back_garden_temperature_sensor_temperature
+                      color: "#c0392b"
+                      line_width: 1.5
+                      decimals: 2
+                      aggregate_func: last
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.outside_seasonal_thresholds.cold
+                            color: sensor.outside_seasonal_thresholds.temp_color_cold
+                          - value: sensor.outside_seasonal_thresholds.ideal
+                            color: >-
+                              sensor.outside_seasonal_thresholds.temp_color_ideal
+                          - value: sensor.outside_seasonal_thresholds.warm
+                            color: sensor.outside_seasonal_thresholds.temp_color_warm
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 4H
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                    - 30D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 185
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.back_garden_temperature_sensor_humidity
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.outside_seasonal_thresholds.humidity_dry
+                            color: >-
+                              sensor.outside_seasonal_thresholds.humidity_color_dry
+                          - value: sensor.outside_seasonal_thresholds.humidity_ideal
+                            color: >-
+                              sensor.outside_seasonal_thresholds.humidity_color_ideal
+                          - value: sensor.outside_seasonal_thresholds.humidity_humid
+                            color: >-
+                              sensor.outside_seasonal_thresholds.humidity_color_humid
+                      color: "#2ecc71"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      decimals: 2
+                      aggregate_func: last
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  name: Soil Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                    - 30D
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 185
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.back_garden_cuphea_soil_moisture
+                      statistic_id: null
+                      name: Cuphea
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.cuphea_soil_moisture_thresholds.wet
+                            color: sensor.cuphea_soil_moisture_thresholds.color_wet
+                          - value: sensor.cuphea_soil_moisture_thresholds.ideal
+                            color: sensor.cuphea_soil_moisture_thresholds.color_ideal
+                          - value: sensor.cuphea_soil_moisture_thresholds.dry
+                            color: sensor.cuphea_soil_moisture_thresholds.color_dry
+                      state_adaptive_color: true
+                      show_color_dot: false
+                      hide_name: true
+                    - entity: sensor.back_garden_poppy_soil_moisture
+                      statistic_id: null
+                      name: Poppy
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      align_state: center
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.poppy_soil_moisture_thresholds.wet
+                            color: sensor.poppy_soil_moisture_thresholds.color_wet
+                          - value: sensor.poppy_soil_moisture_thresholds.ideal
+                            color: sensor.poppy_soil_moisture_thresholds.color_ideal
+                          - value: sensor.poppy_soil_moisture_thresholds.dry
+                            color: sensor.poppy_soil_moisture_thresholds.color_dry
+                      state_adaptive_color: true
+                      show_color_dot: false
+                    - entity: sensor.back_garden_rose_tree_soil_moisture
+                      name: Rose Tree
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.rose_tree_soil_moisture_thresholds.wet
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_wet
+                          - value: sensor.rose_tree_soil_moisture_thresholds.ideal
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_ideal
+                          - value: sensor.rose_tree_soil_moisture_thresholds.dry
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_dry
+                      show_color_dot: false
+                      state_adaptive_color: true
+                      align_state: right
+                  annotations:
+                    - value: 45
+                      label: Jun–Aug water below 45%
+                    - value: 40
+                      label: Mar–May water below 40%
+                    - value: 38
+                      label: Sep–Oct water below 38%
+                    - value: 25
+                      label: Nov–Feb water below 25%
+                    - value: 60
+                      label: Upper ideal limit
+            layout_options:
+              grid_columns: full
+            visibility:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            options:
+              defaultTabIndex: 0
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+        column_span: 4
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 0px) and (max-width: 767px)"
+      - type: grid
+        cards:
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 1H
+                    - 2H
+                    - 4H
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                    - 30D
+                  points_per_hour: 6
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  interval_picker_group: backgarden
+                  entities:
+                    - entity: sensor.back_garden_temperature_sensor_temperature
+                      color: "#c0392b"
+                      line_width: 1.5
+                      decimals: 2
+                      aggregate_func: last
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.outside_seasonal_thresholds.cold
+                            color: sensor.outside_seasonal_thresholds.temp_color_cold
+                          - value: sensor.outside_seasonal_thresholds.ideal
+                            color: >-
+                              sensor.outside_seasonal_thresholds.temp_color_ideal
+                          - value: sensor.outside_seasonal_thresholds.warm
+                            color: sensor.outside_seasonal_thresholds.temp_color_warm
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            grid_options:
+              columns: 24
+              rows: auto
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 4H
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                    - 30D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  interval_picker_group: backgarden
+                  entities:
+                    - entity: sensor.back_garden_temperature_sensor_humidity
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color_thresholds:
+                        enabled: true
+                        values: []
+                      color: "#2ecc71"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      decimals: 2
+                      aggregate_func: last
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  name: Soil Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_tooltip_total: false
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                    - 30D
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.back_garden_cuphea_soil_moisture
+                      statistic_id: null
+                      name: Cuphea
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.cuphea_soil_moisture_thresholds.wet
+                            color: sensor.cuphea_soil_moisture_thresholds.color_wet
+                          - value: sensor.cuphea_soil_moisture_thresholds.ideal
+                            color: sensor.cuphea_soil_moisture_thresholds.color_ideal
+                          - value: sensor.cuphea_soil_moisture_thresholds.dry
+                            color: sensor.cuphea_soil_moisture_thresholds.color_dry
+                      hide_name: true
+                      show_color_dot: false
+                      state_adaptive_color: true
+                    - entity: sensor.back_garden_poppy_soil_moisture
+                      statistic_id: null
+                      name: Poppy
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      align_state: center
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.poppy_soil_moisture_thresholds.wet
+                            color: sensor.poppy_soil_moisture_thresholds.color_wet
+                          - value: sensor.poppy_soil_moisture_thresholds.ideal
+                            color: sensor.poppy_soil_moisture_thresholds.color_ideal
+                          - value: sensor.poppy_soil_moisture_thresholds.dry
+                            color: sensor.poppy_soil_moisture_thresholds.color_dry
+                      state_adaptive_color: true
+                      show_color_dot: false
+                    - entity: sensor.back_garden_rose_tree_soil_moisture
+                      name: Rose Tree
+                      line_width: 1.5
+                      state_size: 18px
+                      aggregate_func: last
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: sensor.rose_tree_soil_moisture_thresholds.wet
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_wet
+                          - value: sensor.rose_tree_soil_moisture_thresholds.ideal
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_ideal
+                          - value: sensor.rose_tree_soil_moisture_thresholds.dry
+                            color: >-
+                              sensor.rose_tree_soil_moisture_thresholds.color_dry
+                      show_color_dot: false
+                      state_adaptive_color: true
+                      align_state: right
+                  annotations:
+                    - value: 45
+                      label: Jun–Aug water below 45%
+                    - value: 40
+                      label: Mar–May water below 40%
+                    - value: 38
+                      label: Sep–Oct water below 38%
+                    - value: 25
+                      label: Nov–Feb water below 25%
+                    - value: 60
+                      label: Upper ideal limit
+            grid_options:
+              columns: 24
+              rows: auto
+            options:
+              defaultTabIndex: 1
+            styles: {}
+            attributes: {}
+        column_span: 4
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - type: custom:advanced-camera-card
+            cameras:
+              - camera_entity: camera.back_door_video_doorbell_clear
+            view:
+              default: live
+            performance:
+              style:
+                border_radius: true
+                box_shadow: true
+            grid_options:
+              columns: full
+        column_span: 4
+      - type: grid
+        cards: []
+        column_span: 1
+      - type: grid
+        cards:
+          - type: tile
+            entity: light.garage_lights
+            features_position: bottom
+            vertical: true
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: light.garage_wall_lights
+            name: Wall Lights
+            vertical: true
+            grid_options:
+              columns: 6
+              rows: 2
+            features_position: bottom
+            view_layout:
+              grid-area: lights
+          - type: tile
+            grid_options:
+              columns: 6
+              rows: 2
+            entity: light.outside_roof_lights
+            name: Roof Lights
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: switch.back_garden_outside_sockets_left
+            features_position: bottom
+            vertical: false
+            color: primary
+            name: Sockets Left
+            grid_options:
+              columns: 6
+              rows: 1
+          - type: tile
+            entity: switch.back_garden_outside_sockets_right
+            features_position: bottom
+            vertical: false
+            name: Sockets Right
+            color: primary
+            grid_options:
+              columns: 6
+              rows: 1
+        column_span: 2
+      - type: grid
+        cards: []
+    path: back-garden
+    dense_section_placement: false
+    subview: true
+  - title: Front Garden
+    type: sections
+    max_columns: 4
+    cards: []
+    icon: mdi:flower
+    badges:
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.front_door_contact_sensor
+        tap_action:
+          action: more-info
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb
+        content: >-
+          {{ state_attr('sensor.number_of_lights_on', 'count')['Front Garden']
+          }}
+        color: ""
+    sections:
+      - type: grid
+        cards: []
+        column_span: 1
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - type: tile
+            entity: light.front_garden_wall_led
+            name: Wall Light
+            vertical: true
+            features:
+              - type: light-brightness
+            features_position: bottom
+            view_layout:
+              grid-area: lights
+          - type: tile
+            entity: light.house_sign
+            features_position: bottom
+            vertical: true
+            color: white
+            name: House Sign
+            features:
+              - type: toggle
+        column_span: 2
+      - type: grid
+        cards: []
+        visibility:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+      - type: grid
+        cards:
+          - type: custom:advanced-camera-card
+            cameras:
+              - camera_entity: camera.front_door_video_doorbell_clear
+            view:
+              default: live
+            performance:
+              style:
+                border_radius: true
+                box_shadow: true
+            grid_options:
+              columns: full
+        column_span: 4
+    path: front-garden
+    subview: true
+    top_margin: false
+  - title: Kitchen
+    path: kitchen
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges:
+      - type: entity
+        entity: sensor.kitchen_motion_sensor_illuminance
+        show_name: false
+        show_state: true
+        show_icon: true
+        color: white
+      - type: entity
+        entity: binary_sensor.kitchen_motion_sensor_occupancy
+        show_name: false
+        show_state: false
+        show_icon: true
+      - type: entity
+        entity: binary_sensor.kitchen_contact_sensor_door
+        show_name: false
+        show_state: false
+        show_icon: true
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb-group
+        color: amber
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Kitchen'] }}"
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        color: primary
+        content: "{{ state_attr('sensor.number_of_sockets_on', 'count')['Kitchen'] }}"
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Room Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.kitchen_temperature_sensor_temperature
+              - type: entity
+                entity: sensor.kitchen_temperature_sensor_humidity
+              - type: entity
+                entity: sensor.kitchen_motion_sensor_illuminance
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  show_pph_picker: true
+                  show_group_by_picker: true
+                  pph_picker_group: Kitchen
+                  group_by_picker_group: Kitchen
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  tooltip_sync: true
+                  zoom_sync: true
+                  scroll_sync: true
+                  entities:
+                    - entity: sensor.kitchen_temperature_sensor_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 28
+                            color: "#e74c3c"
+                          - value: 25
+                            color: "#f39c12"
+                          - value: 22
+                            color: "#2ecc71"
+                          - value: 18
+                            color: "#27ae60"
+                          - value: 15
+                            color: "#3498db"
+                          - value: 0
+                            color: "#3366ff"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  show_pph_picker: true
+                  show_group_by_picker: true
+                  pph_picker_group: Kitchen
+                  group_by_picker_group: Kitchen
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  zoom_sync: true
+                  scroll_sync: true
+                  entities:
+                    - entity: sensor.kitchen_temperature_sensor_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 75
+                            color: "#8e44ad"
+                          - value: 65
+                            color: "#3498db"
+                          - value: 60
+                            color: "#2ecc71"
+                          - value: 40
+                            color: "#27ae60"
+                          - value: 30
+                            color: "#f39c12"
+                          - value: 0
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Fridge
+            icon: mdi:fridge-outline
+            badges:
+              - type: entity
+                entity: binary_sensor.neff_refrigerator_door
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                  show_pph_picker: true
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.kitchen_neff_refrigerator_sensor_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 8
+                            color: "#e74c3c"
+                          - value: 6
+                            color: "#f39c12"
+                          - value: 4
+                            color: "#2ecc71"
+                          - value: 2
+                            color: "#3498db"
+                          - value: 0
+                            color: "#3366ff"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      auto_hide: false
+                      show_average: true
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                  show_pph_picker: true
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.kitchen_neff_refrigerator_sensor_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 85
+                            color: "#8e44ad"
+                          - value: 75
+                            color: "#3498db"
+                          - value: 40
+                            color: "#2ecc71"
+                          - value: 25
+                            color: "#f39c12"
+                          - value: 0
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      auto_hide: false
+                      show_average: true
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Freezer
+            icon: mdi:snowflake
+            badges:
+              - type: entity
+                entity: binary_sensor.neff_freezer_door
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                  show_pph_picker: true
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.kitchen_neff_freezer_sensor_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: -10
+                            color: "#e74c3c"
+                          - value: -15
+                            color: "#f39c12"
+                          - value: -18
+                            color: "#2ecc71"
+                          - value: -22
+                            color: "#3498db"
+                          - value: -30
+                            color: "#3366ff"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#74a7fe"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      auto_hide: false
+                      show_average: true
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 24H
+                    - 3D
+                    - 7D
+                    - 14D
+                  show_pph_picker: true
+                  points_per_hour: 1
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 250
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.kitchen_neff_freezer_sensor_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 90
+                            color: "#8e44ad"
+                          - value: 75
+                            color: "#3498db"
+                          - value: 40
+                            color: "#2ecc71"
+                          - value: 25
+                            color: "#f39c12"
+                          - value: 0
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.5
+                      state_size: "18"
+                      show_color_dot: false
+                      auto_hide: false
+                      show_average: true
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: entity
+                entity: sensor.number_of_lights_on
+          - type: tile
+            layout_options:
+              grid_columns: 3
+              grid_rows: 2
+            entity: light.kitchen_lights
+            name: Spots
+            icon: ""
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            features_position: bottom
+          - type: tile
+            entity: light.kitchen_cabinets
+            name: Cabinets
+            icon: mdi:led-strip-variant
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            layout_options:
+              grid_columns: 3
+              grid_rows: 2
+          - type: tile
+            entity: light.kitchen_floor_led
+            name: Floor LEDs
+            icon: mdi:led-strip
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Appliances
+            icon: mdi:fridge
+            badges: []
+          - type: custom:device-card
+            device_id: REPLACE_WITH_YOUR_FREEZER_DEVICE_ID
+            exclude_sections:
+              - diagnostics
+              - configurations
+            preview_count: "8"
+            entity_id: sensor.neff_freezer_power
+            layout_options:
+              grid_columns: 4
+            features:
+              - collapse
+          - type: custom:device-card
+            device_id: REPLACE_WITH_YOUR_REFRIGERATOR_DEVICE_ID
+            exclude_sections:
+              - diagnostics
+              - configurations
+            preview_count: "8"
+            entity_id: sensor.kitchen_refrigerator_plug_power
+            layout_options:
+              grid_columns: 4
+            features:
+              - collapse
+          - type: tile
+            entity: cover.kitchen_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: false
+            features:
+              - type: cover-open-close
+            layout_options:
+              grid_columns: 4
+              grid_rows: 1
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges:
+              - type: entity
+                entity: sensor.number_of_sockets_on
+          - type: tile
+            entity: switch.kitchen_sockets_1_left
+            name: Socket 1 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_1_right
+            name: Water Heater
+            icon: mdi:kettle
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_2_left
+            name: Air Fryer
+            icon: mdi:toaster-oven
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_2_right
+            name: Socket 2 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_3_left
+            name: Bread Maker
+            icon: mdi:bread-slice
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_3_right
+            name: Vacuum Sealer
+            icon: mdi:vacuum
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_4_left
+            name: Microwave
+            icon: mdi:microwave
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_sockets_4_right
+            name: Tin Opener
+            icon: mdi:food
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+            entity: switch.kitchen_smart_plug_outlet
+            name: Smart Plug
+            icon: ""
+            color: primary
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: switch.kitchen_extractor_fan_plug_outlet
+            name: Extractor Fan
+            icon: mdi:fan
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_washing_machine_plug_outlet
+            name: Washing Machine
+            icon: mdi:washing-machine
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.neff_freezer_socket
+            name: Freezer
+            icon: mdi:snowflake
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.kitchen_refrigerator_plug_outlet
+            name: Fridge
+            icon: mdi:fridge-outline
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
+  - title: Lounge
+    path: lounge
+    type: sections
+    max_columns: 4
+    badges: []
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: binary_sensor.lounge_motion_sensor_occupancy
+              - type: entity
+                entity: binary_sensor.lounge_contact_sensor_door
+              - type: entity
+                entity: sensor.wiser_lts_temperature_lounge
+              - type: entity
+                entity: sensor.wiser_lts_humidity_lounge
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                  default: true
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  date_picker_group: boiler
+                  interval_picker_group: lounge
+                  entities:
+                    - entity: sensor.wiser_lts_temperature_lounge
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: 18px
+                      show_color_dot: false
+                      hide_name: true
+                    - entity: sensor.h5075_4d3d_temperature
+                      statistic_id: null
+                      name: null
+                      color: "#f1c9fe"
+                      line_width: 1
+                      auto_hide: true
+                      show_average: true
+                      align_state: right
+                      state_size: 18px
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  date_picker_group: boiler
+                  interval_picker_group: lounge
+                  entities:
+                    - entity: sensor.wiser_lts_humidity_lounge
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.lounge_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:sprout
+                  name: Cactus Soil
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 0.5
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  date_picker_group: boiler
+                  interval_picker_group: lounge
+                  entities:
+                    - entity: sensor.lounge_christmas_cactus_soil_sensor_soil_moisture
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 60
+                            color: "#8e44ad"
+                          - value: 55
+                            color: "#3498db"
+                          - value: 35
+                            color: "#2ecc71"
+                          - value: 28
+                            color: "#f39c12"
+                          - value: 0
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations:
+                    - value: 40
+                      label: Mar–Aug water below 40%
+                    - value: 32
+                      label: Sep–Nov water below 32%
+                    - value: 28
+                      label: Dec–Feb water below 28%
+                    - value: 55
+                      label: Upper ideal limit
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Climate
+            icon: mdi:thermostat
+          - type: thermostat
+            entity: climate.lounge_heating
+            name: " "
+            theme: Custom Thermostat Theme
+            show_current_as_primary: true
+            features:
+              - type: climate-hvac-modes
+            layout_options:
+              grid_columns: 4
+              grid_rows: 5
+          - type: tile
+            entity: cover.lounge_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: cover.lounge_patio_window_shade
+            name: Patio Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: custom:mushroom-template-badge
+                icon: mdi:lightbulb
+                content: >-
+                  {{ state_attr('sensor.number_of_lights_on', 'count')['Lounge']
+                  }}
+          - type: tile
+            entity: light.lounge_table_light
+            name: Table
+            icon: mdi:table-furniture
+            color: amber
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: light.lounge_lamp_1
+            name: Lamp 1
+            icon: mdi:floor-lamp
+            color: amber
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: light.lounge_lamp_2
+            name: Lamp 2
+            icon: mdi:floor-lamp
+            color: amber
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: light.lounge_lamp_3
+            name: Lamp 3
+            icon: mdi:floor-lamp
+            color: amber
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            layout_options:
+              grid_columns: 8
+              grid_rows: 1
+            entity: light.lounge_extension_lights
+            name: Extension Spots
+            icon: ""
+            color: amber
+            vertical: false
+            features:
+              - type: light-brightness
+            features_position: bottom
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges:
+              - type: custom:mushroom-template-badge
+                icon: mdi:power-socket-uk
+                content: >-
+                  {{ state_attr('sensor.number_of_sockets_on',
+                  'count')['Lounge'] }}
+          - type: tile
+            entity: switch.lounge_sockets_1_left
+            name: Socket 1 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.lounge_sockets_1_right
+            name: Socket 1 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.lounge_sockets_2_left
+            name: Socket 2 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.lounge_sockets_2_right
+            name: Socket 2 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.lounge_sockets_3_left
+            name: Socket 3 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.lounge_sockets_4_left
+            name: Sofa
+            icon: mdi:sofa
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+            entity: switch.lounge_sockets_5_left
+            name: Socket 5 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: switch.lounge_sockets_5_right
+            name: Socket 5 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
+  - title: Media Room
+    path: media-room
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges: []
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Room Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.media_room_motion_sensor_occupancy
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.media_room_contact_sensor_door
+              - type: entity
+                entity: sensor.wiser_lts_temperature_media_room
+              - type: entity
+                entity: sensor.wiser_lts_humidity_media_room
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_temperature_media_room
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 0.5
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_humidity_media_room
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.media_room_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Climate
+            icon: mdi:thermostat
+          - type: thermostat
+            entity: climate.media_room_heating
+            name: " "
+            theme: Custom Thermostat Theme
+            show_current_as_primary: true
+            features:
+              - type: climate-hvac-modes
+            layout_options:
+              grid_columns: 4
+              grid_rows: 5
+          - type: tile
+            entity: cover.media_room_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+              - type: cover-position
+            grid_options:
+              columns: 6
+              rows: null
+          - type: custom:mushroom-media-player-card
+            entity: media_player.media_room_tv
+            name: TV
+            icon: mdi:television
+            volume_controls:
+              - volume_buttons
+              - volume_mute
+            media_controls: []
+            layout: vertical
+            fill_container: false
+            show_volume_level: true
+            use_media_info: true
+            collapsible_controls: true
+            grid_options:
+              columns: 6
+              rows: auto
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: custom:mushroom-template-badge
+                icon: mdi:lightbulb
+                content: >-
+                  {{ state_attr('sensor.number_of_lights_on', 'count')['Media
+                  Room'] }}
+          - type: tile
+            entity: light.media_room_lights
+            name: Spots
+            icon: ""
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            features_position: bottom
+            grid_options:
+              rows: auto
+          - type: tile
+            entity: light.media_room_sideboard_lamps
+            name: Sideboard Lamps
+            icon: mdi:lamp
+            color: amber
+            vertical: true
+            features_position: bottom
+            features:
+              - type: light-brightness
+            grid_options:
+              columns: 6
+              rows: auto
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges:
+              - type: custom:mushroom-template-badge
+                icon: mdi:power-socket-uk
+                content: >-
+                  {{ state_attr('sensor.number_of_sockets_on', 'count')['Media
+                  Room'] }}
+          - type: tile
+            entity: switch.media_room_tv_sockets_1_left
+            name: TV 1 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_tv_sockets_1_right
+            name: TV 1 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_tv_sockets_2_left
+            name: TV 2 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_tv_sockets_2_right
+            name: TV 2 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_tv_sockets_3_left
+            name: TV 3 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_tv_sockets_3_right
+            name: TV 3 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_sockets_1_left
+            name: Subwoofer
+            icon: mdi:speaker
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_sockets_1_right
+            name: Socket 1 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_sofa_outlet
+            name: Sofa
+            icon: mdi:sofa
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.media_room_sockets_2_left
+            name: Socket 2 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
+  - title: Hall
+    path: hall
+    type: sections
+    max_columns: 3
+    badges:
+      - type: entity
+        show_name: false
+        show_state: true
+        show_icon: true
+        entity: sensor.hall_motion_sensor_device_temperature
+        color: white
+      - type: entity
+        show_name: false
+        show_state: true
+        show_icon: true
+        entity: sensor.hall_motion_sensor_illuminance
+        color: white
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.hall_motion_sensor_occupancy
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.front_door_contact_sensor
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Hall'] }}"
+        color: ""
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        content: "{{ state_attr('sensor.number_of_sockets_on', 'count')['Hall'] }}"
+        color: ""
+    sections:
+      - type: grid
+        cards: []
+      - type: grid
+        cards:
+          - type: tile
+            entity: light.hall_lights
+            vertical: true
+            name: Spots
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: markdown
+            content: " "
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            grid_options:
+              columns: 6
+              rows: 2
+            entity: switch.hall_sockets_left
+            name: Left
+            color: primary
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: switch.hall_sockets_right
+            name: Stair Lift
+            color: primary
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: switch.hall_cupboard_sockets_1_left
+            vertical: true
+            color: primary
+            name: Cupboard Sockets 1 Left
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: switch.hall_cupboard_sockets_1_right
+            vertical: true
+            color: primary
+            name: Cupboard Router
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: switch.hall_cupboard_sockets_2_left
+            vertical: true
+            color: primary
+            name: Cupboard Sockets 2 Left
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: switch.hall_cupboard_sockets_2_right
+            vertical: true
+            color: primary
+            name: Cupboard Sockets 2 Right
+            features_position: bottom
+            grid_options:
+              columns: 6
+              rows: 2
+        column_span: 1
+      - type: grid
+        cards: []
+    cards: []
+    subview: true
+  - title: Landing
+    path: landing
+    type: sections
+    max_columns: 3
+    badges:
+      - type: entity
+        show_name: false
+        show_state: true
+        show_icon: true
+        entity: sensor.landing_motion_sensor_1_device_temperature
+        color: white
+      - type: entity
+        show_name: false
+        show_state: true
+        show_icon: true
+        entity: sensor.landing_motion_sensor_1_illuminance
+        color: white
+      - type: entity
+        show_name: false
+        show_state: false
+        show_icon: true
+        entity: binary_sensor.landing_motion_sensor
+        color: ""
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Landing'] }}"
+        color: ""
+        tap_action:
+          action: more-info
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Room Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.wiser_lts_temperature_media_room
+              - type: entity
+                entity: sensor.wiser_lts_humidity_media_room
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 0.5
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.landing_temperature_sensor_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 28
+                            color: "#e74c3c"
+                          - value: 25
+                            color: "#f39c12"
+                          - value: 22
+                            color: "#2ecc71"
+                          - value: 18
+                            color: "#27ae60"
+                          - value: 15
+                            color: "#3498db"
+                          - value: 0
+                            color: "#3366ff"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 0.5
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  show_full_period: true
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.landing_temperature_sensor_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 75
+                            color: "#8e44ad"
+                          - value: 65
+                            color: "#3498db"
+                          - value: 60
+                            color: "#2ecc71"
+                          - value: 40
+                            color: "#27ae60"
+                          - value: 30
+                            color: "#f39c12"
+                          - value: 0
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        cards: []
+      - type: grid
+        cards:
+          - type: tile
+            entity: alarm_control_panel.house_alarm
+            vertical: true
+            features:
+              - type: alarm-modes
+                modes:
+                  - armed_away
+                  - disarmed
+          - type: tile
+            entity: light.landing_lights
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+            name: Spots
+            features:
+              - type: light-brightness
+          - type: entities
+            state_color: true
+            show_header_toggle: false
+            title: GAS
+            entities:
+              - entity: binary_sensor.gas_sensor_gas
+                name: Sensor
+              - entity: sensor.gas_sensor_gas_concentration
+                name: Concentration
+              - entity: button.gas_sensor_mute
+                name: Mute
+          - type: entities
+            state_color: true
+            show_header_toggle: false
+            title: Smoke
+            entities:
+              - entity: binary_sensor.smoke_detector
+                name: Sensor
+        column_span: 1
+      - type: grid
+        cards: []
+    cards: []
+    subview: true
+  - title: Wetroom
+    path: wetroom
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges:
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb-group
+        color: amber
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Landing'] }}"
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Room Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.wetroom_sensor_temperature
+              - type: entity
+                entity: sensor.wetroom_sensor_humidity
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.wetroom_humidity_derivative
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  name: Temperature
+                  icon: mdi:thermometer
+                  default: true
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wetroom_sensor_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetoom_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  name: Humidity
+                  icon: mdi:water-percent
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wetroom_sensor_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.wetroom_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  name: Derivative
+                  icon: mdi:chart-bell-curve
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wetroom_humidity_derivative
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: 15
+                            color: "#8e44ad"
+                          - value: 8
+                            color: "#3498db"
+                          - value: 2
+                            color: "#2ecc71"
+                          - value: -2
+                            color: "#27ae60"
+                          - value: -8
+                            color: "#f39c12"
+                          - value: -15
+                            color: "#e74c3c"
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#8e44ad"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+      - type: grid
+        column_span: 1
+        cards: []
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Controls
+            icon: mdi:tune
+          - type: tile
+            grid_options:
+              columns: 6
+              rows: 2
+            entity: light.wetroom_lights
+            name: Wetroom Lights
+            icon: ""
+            color: amber
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: input_number.shower_hot_water_temperature
+            name: Shower Hot Water
+            icon: mdi:water-thermometer
+            color: red
+            vertical: true
+            grid_options:
+              columns: 6
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Ventilation
+            icon: mdi:fan
+          - type: tile
+            entity: fan.wetroom_extractor_fan
+            name: Extractor Fan
+            icon: mdi:fan
+            color: primary
+            vertical: true
+            features:
+              - type: fan-speed
+            layout_options:
+              grid_columns: 4
+              grid_rows: 3
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: OpenTherm Boiler
+            icon: mdi:water-boiler
+          - type: entities
+            entities:
+              - entity: input_number.shower_hot_water_temperature
+              - entity: binary_sensor.slave_ch_active_boiler_otgw
+              - entity: binary_sensor.slave_flame_on_boiler_otgw
+              - entity: sensor.exhaust_temp_boiler_otgw
+              - entity: sensor.ch_water_temp_boiler_otgw
+              - entity: sensor.return_water_temp_boiler_otgw
+              - entity: sensor.dhw_temp_boiler_otgw
+              - entity: binary_sensor.slave_dhw_active_boiler_otgw
+              - entity: sensor.dhw_flow_rate_boiler_otgw
+              - entity: sensor.slave_max_capacity_boiler_otgw
+              - entity: sensor.slave_min_mod_level_boiler_otgw
+              - entity: sensor.slave_max_relative_modulation_boiler_otgw
+              - entity: sensor.relative_mod_level_boiler_otgw
+              - entity: sensor.max_ch_setpoint_boiler_otgw
+              - entity: sensor.slave_dhw_max_setp_boiler_otgw
+              - entity: sensor.dhw_setpoint_boiler_otgw
+              - entity: binary_sensor.slave_air_pressure_fault_boiler_otgw
+              - entity: binary_sensor.slave_low_water_pressure_boiler_otgw
+              - entity: sensor.ch_water_pressure_boiler_otgw
+              - entity: binary_sensor.slave_cooling_active_boiler_otgw
+              - entity: binary_sensor.slave_diagnostic_indication_boiler_otgw
+              - entity: binary_sensor.slave_fault_indication_boiler_otgw
+            layout_options:
+              grid_columns: full
+    cards: []
+    subview: true
+  - title: Office
+    path: office
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges:
+      - type: entity
+        entity: binary_sensor.office_contact_sensor_door
+        show_name: false
+        show_state: false
+        show_icon: true
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb-group
+        color: amber
+        content: "{{ state_attr('sensor.number_of_lights_on', 'count')['Office'] }}"
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        color: primary
+        content: "{{ state_attr('sensor.number_of_sockets_on', 'count')['Office'] }}"
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Office
+            heading_style: title
+            icon: mdi:desk
+            badges:
+              - type: entity
+                entity: sensor.wiser_lts_temperature_office
+              - type: entity
+                entity: sensor.wiser_lts_humidity_office
+          - type: tile
+            entity: button.office_somfy_window_shade_my_position
+            name: Shade My Position
+            icon: mdi:roller-shade
+            color: primary
+            state_content: area_name
+            vertical: false
+            features_position: bottom
+            layout_options:
+              grid_columns: 3
+              grid_rows: 1
+          - type: tile
+            entity: switch.office_network_cabinet
+            name: Network Cabinet
+            icon: mdi:server-network
+            color: primary
+            vertical: false
+            icon_tap_action:
+              action: more-info
+            grid_options:
+              columns: 9
+              rows: 1
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.wiser_lts_temperature_office
+              - type: entity
+                entity: sensor.wiser_lts_humidity_office
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_temperature_office
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_humidity_office
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.office_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Climate
+            icon: mdi:thermostat
+          - type: thermostat
+            entity: climate.office_heating
+            theme: Custom Thermostat Theme
+            show_current_as_primary: true
+            features:
+              - type: climate-hvac-modes
+            layout_options:
+              grid_columns: 4
+              grid_rows: 5
+            name: " "
+          - type: tile
+            entity: cover.office_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+              - type: cover-position
+            grid_options:
+              columns: 9
+              rows: 4
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: entity
+                entity: sensor.number_of_lights_on
+          - type: tile
+            layout_options:
+              grid_columns: 4
+              grid_rows: 2
+            entity: light.office_lights
+            name: Spots
+            icon: ""
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            features_position: bottom
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges:
+              - type: entity
+                entity: sensor.number_of_sockets_on
+          - type: tile
+            entity: switch.office_sockets_1_left
+            name: Socket 1 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.office_sockets_1_right
+            name: Socket 1 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.office_sockets_2_left
+            name: Socket 2 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.office_sockets_2_right
+            name: Socket 2 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
+  - title: Main Bedroom
+    path: main-bedroom
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges:
+      - type: entity
+        entity: binary_sensor.main_bedroom_contact_sensor_door
+        show_name: false
+        show_state: false
+        show_icon: true
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb-group
+        color: amber
+        content: >-
+          {{ state_attr('sensor.number_of_lights_on', 'count')['Main Bedroom']
+          }}
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        color: primary
+        content: >-
+          {{ state_attr('sensor.number_of_sockets_on', 'count')['Main Bedroom']
+          }}
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.main_bedroom_temperature
+              - type: entity
+                entity: sensor.main_bedroom_humidity
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.main_bedroom_temperature
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.main_bedroom_humidity
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Climate
+            icon: mdi:thermostat
+          - type: thermostat
+            entity: climate.main_bedroom_heating
+            theme: Custom Thermostat Theme
+            show_current_as_primary: true
+            features:
+              - type: climate-hvac-modes
+            layout_options:
+              grid_columns: 4
+              grid_rows: 5
+            name: " "
+          - type: tile
+            entity: cover.main_bedroom_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+              - type: cover-position
+            layout_options:
+              grid_columns: 4
+              grid_rows: 2
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: entity
+                entity: sensor.number_of_lights_on
+          - type: tile
+            layout_options:
+              grid_columns: 8
+              grid_rows: 2
+            entity: light.main_bedroom_lights
+            name: Spots
+            icon: ""
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            features_position: bottom
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges:
+              - type: entity
+                entity: sensor.number_of_sockets_on
+          - type: tile
+            entity: switch.main_bedroom_sockets_left
+            name: Socket 1 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.main_bedroom_sockets_right
+            name: Socket 1 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
+  - title: Spare Bedroom
+    path: spare-bedroom
+    type: sections
+    max_columns: 4
+    dense_section_placement: false
+    badges:
+      - type: entity
+        entity: binary_sensor.spare_bedroom_contact_sensor
+        show_name: false
+        show_state: false
+        show_icon: true
+      - type: custom:mushroom-template-badge
+        icon: mdi:lightbulb-group
+        color: amber
+        content: >-
+          {{ state_attr('sensor.number_of_lights_on', 'count')['Spare Bedroom']
+          }}
+      - type: custom:mushroom-template-badge
+        icon: mdi:power-socket-uk
+        color: primary
+        content: >-
+          {{ state_attr('sensor.number_of_sockets_on', 'count')['Spare Bedroom']
+          }}
+    sections:
+      - type: grid
+        column_span: 4
+        cards:
+          - type: heading
+            heading: Trends
+            icon: mdi:chart-line
+            badges:
+              - type: entity
+                entity: sensor.wiser_lts_temperature_spare_bedroom
+              - type: entity
+                entity: sensor.wiser_lts_humidity_spare_bedroom
+          - type: custom:orbit-deck-card
+            layout: tabs
+            decks:
+              - attributes:
+                  icon: mdi:thermometer
+                  name: Temperature
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_temperature_spare_bedroom
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_cold
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_cold
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_temperature_warm
+                            color: >-
+                              sensor.indoor_environmental_thresholds.temp_color_warm
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#2ecc71"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+              - attributes:
+                  icon: mdi:water-percent
+                  name: Humidity
+                card:
+                  type: custom:statistics-graph-chart-card
+                  card_padding: 0
+                  card_border_width: 0
+                  show_interval_picker: true
+                  interval_options:
+                    - 8H
+                    - 12H
+                    - 24H
+                    - 3D
+                    - 7D
+                  points_per_hour: 4
+                  tooltip_match_axis: false
+                  tooltip_order: default
+                  height: 260
+                  x_grid_style: dashed
+                  y_grid_style: dashed
+                  entities:
+                    - entity: sensor.wiser_lts_humidity_spare_bedroom
+                      color_thresholds:
+                        enabled: true
+                        values:
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_extreme
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_extreme
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_humid
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_humid
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_ideal
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_ideal
+                          - value: >-
+                              sensor.indoor_environmental_thresholds.bedroom_humidity_dry
+                            color: >-
+                              sensor.indoor_environmental_thresholds.humidity_color_dry
+                      rise_fall_colors:
+                        enabled: false
+                        increase: "#2ecc71"
+                        decrease: "#e74c3c"
+                        stable: "#95a5a6"
+                      color: "#3498db"
+                      line_width: 1.8
+                      aggregate_func: last
+                      state_size: "18"
+                      show_color_dot: false
+                      hide_name: true
+                  annotations: []
+            layout_options:
+              grid_columns: full
+            options: {}
+            styles:
+              "--mdc-theme-primary": var(--primary-color)
+            attributes: {}
+      - type: grid
+        column_span: 2
+        cards:
+          - type: heading
+            heading: Climate
+            icon: mdi:thermostat
+          - type: thermostat
+            entity: climate.spare_bedroom_heating
+            name: " "
+            theme: Custom Thermostat Theme
+            show_current_as_primary: true
+            features:
+              - type: climate-hvac-modes
+            layout_options:
+              grid_columns: 4
+              grid_rows: 5
+          - type: tile
+            entity: cover.spare_bedroom_window_shade
+            name: Window Shade
+            icon: mdi:roller-shade
+            color: primary
+            vertical: true
+            features:
+              - type: cover-open-close
+              - type: cover-position
+            layout_options:
+              grid_columns: 4
+              grid_rows: 2
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Lighting
+            icon: mdi:lightbulb-group
+            badges:
+              - type: entity
+                entity: sensor.number_of_lights_on
+          - type: tile
+            entity: light.spare_bedroom_light
+            name: Spots
+            icon: mdi:ceiling-light
+            color: amber
+            vertical: true
+            features:
+              - type: light-brightness
+            layout_options:
+              grid_columns: 8
+              grid_rows: 2
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: Sockets
+            icon: mdi:power-socket-uk
+            badges: []
+          - type: tile
+            entity: switch.spare_bedroom_sockets_2_left
+            name: Socket 2 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.spare_bedroom_sockets_2_right
+            name: Socket 2 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.spare_bedroom_sockets_3_left
+            name: Socket 3 Left
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: tile
+            entity: switch.spare_bedroom_sockets_3_right
+            name: Socket 3 Right
+            icon: mdi:power-socket-uk
+            color: primary
+            vertical: true
+            features_position: bottom
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+    cards: []
+    subview: true
