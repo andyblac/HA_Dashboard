@@ -34,7 +34,7 @@ If a card is not listed in the default HACS catalogue, add its GitHub repository
 
 The `AndyBlac-Home` theme is required for the dashboard to use the layout shown in the preview. It includes CSS that modifies Home Assistant's Sections view layout; without it, the section sizes, spacing, and card positions will not appear as intended.
 
-Download `AndyBlac-Home.yaml` from the [`themes/minimalist-andy` directory](https://github.com/andyblac/HA_config_files/tree/main/themes/minimalist-andy), install it in your Home Assistant themes directory, reload themes, and leave `theme: AndyBlac-Home` set in the dashboard YAML.
+Download `AndyBlac-Home.yaml` from the [`themes/AndyBlac`](https://github.com/andyblac/HA_Dashboard/tree/main/themes/AndyBlac), install it in your Home Assistant themes directory, reload themes, and leave `theme: AndyBlac-Home` set in the dashboard YAML.
 
 The configuration also references `Custom Thermostat Theme` for thermostat cards. Install that theme if you use those cards, or adjust their individual theme settings for your setup.
 
